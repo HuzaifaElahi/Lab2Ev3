@@ -130,7 +130,7 @@ public class Odometer extends OdometerData implements Runnable {
       dY = deltaD*Math.cos(theta);
       theta += deltaT;
       
-     // odo.update(dX, dY, deltaT);
+     //Update with theta as degrees
       odo.update(dX, dY, 180*deltaT/Math.PI);
 
       

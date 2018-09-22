@@ -67,15 +67,23 @@ public class OdometryCorrection implements Runnable {
 			// TODO Calculate new (accurate) robot position
 			double[] result = odometer.getXYT();
 			double theta = result[2];
+			
+			//If line detected (intensity less than 0.3
 			if((newColor) < 0.3) {
+				
+				//Error handling
 				if(result != null) {
+					
+					//Beep to notify, update counter and find correct X and Y using old reference pts
 					Sound.beep();
-					correctX = oldResult[0] + SQUARE_SIZE*Math.sin((Math.PI /180)*theta);
-					correctY = oldResult[1] + SQUARE_SIZE*Math.cos((Math.PI /180)*theta);
+					correctX = oldResult[0] + SQUARE_SIZE*Math.sin((Math.PI /180)*theta);     //convert to radians for sin
+					correctY = oldResult[1] + SQUARE_SIZE*Math.cos((Math.PI /180)*theta);	  //convert to radians for cos
 					passedLine++;
 					String printThis = passedLine +"";
 					LCD.drawString(printThis, 0, 4);
 				}
+				
+				//Set new correct XYT and store info for next loop
 				odometer.setXYT(correctX, correctY, theta);
 				oldResult[0] = correctX;
 				oldResult[1] = correctY;
