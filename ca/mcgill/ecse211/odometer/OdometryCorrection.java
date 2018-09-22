@@ -17,6 +17,8 @@ public class OdometryCorrection implements Runnable {
 	private double countY;
 	private double countX;
 	private double correctX, correctY;
+	double[] oldResult = new double [3];
+
 
 	/**
 	 * This is the default class constructor. An existing instance of the odometer is used. This is to
@@ -66,28 +68,12 @@ public class OdometryCorrection implements Runnable {
 			double x = result[0];
 			double y = result[1];
 			double theta = result[2];
-			double correctX = 0, correctY =0;
-			double[] oldResult = new double [3];
-			/*
-      if((theta > 350 && theta < 360)|| (theta < 10 && theta > 0)) {
-    	  countY++;
-    	  odometer.setXYT(0.0, countY + SQUARE_SIZE, 0.0);
-      }
-      else if((theta > 80 && theta < 100)) {
-    	  countX++;
-    	  odometer.setX(countX + SQUARE_SIZE);
-      }
-      else if((theta > 170 && theta < 190)) {
-    	  countY--;
-    	  odometer.setY(countY + SQUARE_SIZE);
-      }
-      else if((theta > 260 && theta < 280)) {
-    	  countX--;
-    	  odometer.setY(countX + SQUARE_SIZE);
-      }*/
+			
 			if(lastColor/1000 - newColor/1000 > 4) {
-				correctX = x + SQUARE_SIZE*Math.cos(theta);
-				correctY = y + SQUARE_SIZE*Math.sin(theta);
+				if(result != null) {
+					correctX = x + SQUARE_SIZE*Math.cos(theta);
+					correctY = y + SQUARE_SIZE*Math.sin(theta);
+				}
 				odometer.setXYT(correctX, correctY, theta);
 				oldResult[0] = correctX;
 				oldResult[1] = correctY;

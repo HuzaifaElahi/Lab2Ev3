@@ -61,7 +61,7 @@ public class Odometer extends OdometerData implements Runnable {
     //init old tachos
     this.oldLeftTacho = 0;
     this.oldRightTacho = 0;
-    this.theta = 0;
+    //this.theta = 0;
     
     this.TRACK = TRACK;
     this.WHEEL_RAD = WHEEL_RAD;
@@ -128,8 +128,11 @@ public class Odometer extends OdometerData implements Runnable {
       deltaT = (distL-distR)/TRACK;
       dX = deltaD*Math.sin(theta);
       dY = deltaD*Math.cos(theta);
+      theta += deltaT;
       
-      odo.update(dX, dY, deltaT);
+     // odo.update(dX, dY, deltaT);
+      odo.update(dX, dY, 180*deltaT/Math.PI);
+
       
       // TODO Update odometer values with new calculated values
      // odo.update(0.5, 1.8, 20.1);
