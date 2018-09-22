@@ -8,7 +8,6 @@ import lejos.hardware.lcd.TextLCD;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.hardware.port.Port;
 import lejos.hardware.sensor.EV3ColorSensor;
-import lejos.hardware.sensor.SensorMode;
 import lejos.hardware.sensor.SensorModes;
 import lejos.robotics.SampleProvider;
 
@@ -21,15 +20,14 @@ public class Lab2 {
       new EV3LargeRegulatedMotor(LocalEV3.get().getPort("B"));
   private static final TextLCD lcd = LocalEV3.get().getTextLCD();
   public static final double WHEEL_RAD = 2.2;
-  public static final double TRACK = 17.5;
+  public static final double TRACK = 14.25;
   
   //Sensor
   private static final Port portColor = LocalEV3.get().getPort("S1");
-  private static SensorModes myColor = new EV3ColorSensor(portColor);
+  public static SensorModes myColor = new EV3ColorSensor(portColor);
   public static SampleProvider myColorSample = myColor.getMode("Red");
   static float[] sampleColor = new float[myColor.sampleSize()]; 
-  
-  
+    
   public static void main(String[] args) throws OdometerExceptions {
 
     int buttonChoice;
