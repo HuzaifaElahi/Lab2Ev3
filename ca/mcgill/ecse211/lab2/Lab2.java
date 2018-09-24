@@ -22,7 +22,7 @@ public class Lab2 {
   public static final double WHEEL_RAD = 2.2;
   public static final double TRACK = 14.25;
   
-  //Sensor
+  //Color Sensor and its variables are initialized
   private static final Port portColor = LocalEV3.get().getPort("S1");
   public static SensorModes myColor = new EV3ColorSensor(portColor);
   public static SampleProvider myColorSample = myColor.getMode("Red");

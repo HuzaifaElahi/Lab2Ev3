@@ -56,17 +56,25 @@ public class SquareDriver {
   }
 
   /**
-   * This method allows the conversion of a distance to the total rotation of each wheel need to
+   * This method is a helper that allows the conversion of a distance to the total rotation of each wheel need to
    * cover that distance.
    * 
    * @param radius
    * @param distance
-   * @return
+   * @return int
    */
   private static int convertDistance(double radius, double distance) {
     return (int) ((180.0 * distance) / (Math.PI * radius));
   }
-
+  
+  /**
+   * This method allows the conversion of an angle and it's calculated distance to the total rotation of each wheel need to
+   * cover that distance.
+   * 
+   * @param radius
+   * @param distance
+   * @return int
+   */
   private static int convertAngle(double radius, double width, double angle) {
     return convertDistance(radius, Math.PI * width * angle / 360.0);
   }

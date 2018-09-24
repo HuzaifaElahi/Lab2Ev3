@@ -28,7 +28,7 @@ public class Odometer extends OdometerData implements Runnable {
   private int oldRightTacho;
   private double theta;
 
-
+  //Wheel radius and wheel-to-wheel distance
   private final double TRACK;
   private final double WHEEL_RAD;
 
@@ -103,8 +103,11 @@ public class Odometer extends OdometerData implements Runnable {
   }
 
   /**
-   * This method is where the logic for the odometer will run. Use the methods provided from the
-   * OdometerData class to implement the odometer.
+   * This method is where the logic for the odometer is running, using the methods provided from the
+   * OdometerData class. Values of dX, dY and theta (in degrees) are updated using calculations of
+   * prior and current tacho count and geometric displacement using sin and cos with theta
+   * 
+   * @return void
    */
   // run method (required for Thread)
   public void run() {
@@ -116,7 +119,7 @@ public class Odometer extends OdometerData implements Runnable {
       leftMotorTachoCount = leftMotor.getTachoCount();
       rightMotorTachoCount = rightMotor.getTachoCount();
 
-      // TODO Calculate new robot position based on tachometer counts
+      // Calculate new robot position based on tachometer counts
       double distL, distR, deltaD, deltaT, dX, dY;
       distL = Math.PI * WHEEL_RAD * (leftMotorTachoCount - oldLeftTacho)/180;
       distR = Math.PI * WHEEL_RAD * (rightMotorTachoCount - oldRightTacho)/180;
@@ -133,9 +136,6 @@ public class Odometer extends OdometerData implements Runnable {
      //Update with theta as degrees
       odo.update(dX, dY, 180*deltaT/Math.PI);
 
-      
-      // TODO Update odometer values with new calculated values
-     // odo.update(0.5, 1.8, 20.1);
 
       // this ensures that the odometer only runs once every period
       updateEnd = System.currentTimeMillis();

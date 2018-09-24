@@ -11,9 +11,9 @@ public class OdometryCorrection implements Runnable {
 	private static final long CORRECTION_PERIOD = 10;
 	private Odometer odometer;
 
-	//data
+	//Data: constants and variables
 	private float color[];
-	private final double SQUARE_SIZE = 30.48;
+	private static final double SQUARE_SIZE = 30.48;
 	private float[] csData;
 	private double correctX, correctY;
 	double[] oldResult = new double [3];
@@ -25,7 +25,7 @@ public class OdometryCorrection implements Runnable {
 
 	/**
 	 * This is the default class constructor. An existing instance of the odometer is used. This is to
-	 * ensure thread safety.
+	 * ensure thread safety. Variables and color sensor data are initialized. 
 	 * 
 	 * @throws OdometerExceptions
 	 */
@@ -33,21 +33,31 @@ public class OdometryCorrection implements Runnable {
 
 		this.odometer = Odometer.getOdometer();
 
-		//color sensor
+		//Color sensor data and variable initialization
 		color = new float[Lab2.myColorSample.sampleSize()];
 		this.csData = color;
 		correctX = 0;
-		correctY =0;
-		oldSample =0;
+		correctY = 0;
+		oldSample = 0;
 		passedLine = 0;
 
 
 	}
 
 	/**
-	 * Here is where the odometer correction code should be run.
+	 * Here is where the odometer correction code is run. Color sensor data is checked to detect black line
+	 * If black line is found, correction is applied using theta value and constant size of the square 
+	 * using geometric distance calculations. Number of lines detected is kept track of on the LCD and
+	 * Old values are stored for reference for the next time a line is detected.
+	 * 
+	 * Sin and Cos are used instead of if statements for varying cases of theta as the errors in theta cancel
+	 * out over the average square travel to the initial point of origin, and the nature of Sin and Cos being
+	 * negative or positive at the appropriate values of theta along the journey ensures an easy to maintain 
+	 * and understand algorithm in 2 lines.
+	 * 
 	 * 
 	 * @throws OdometerExceptions
+	 * @return void
 	 */
 	// run method (required for Thread)
 	public void run() {
@@ -55,34 +65,36 @@ public class OdometryCorrection implements Runnable {
 
 		//color sensor and scaling
 		Lab2.myColorSample.fetchSample(color, 0);
-		//lastColor = csData * 1000;
+		newColor = csData[0];
 
 		while (true) {
 			correctionStart = System.currentTimeMillis();
 
-			// TODO Trigger correction (When do I have information to correct?)
+			// Trigger correction : store data in newColor
 			Lab2.myColorSample.fetchSample(color, 0);
 			newColor = csData[0];
-			
-			// TODO Calculate new (accurate) robot position
+
+			// Store current robot position and current theta
 			double[] result = odometer.getXYT();
 			double theta = result[2];
-			
-			//If line detected (intensity less than 0.3
+
+			//If line detected (intensity less than 0.3)
 			if((newColor) < 0.3) {
-				
-				//Error handling
+
+				//Error handling 
 				if(result != null) {
-					
+
 					//Beep to notify, update counter and find correct X and Y using old reference pts
 					Sound.beep();
-					correctX = oldResult[0] + SQUARE_SIZE*Math.sin((Math.PI /180)*theta);     //convert to radians for sin
-					correctY = oldResult[1] + SQUARE_SIZE*Math.cos((Math.PI /180)*theta);	  //convert to radians for cos
+					correctX = oldResult[0] + SQUARE_SIZE * Math.sin((Math.PI /180)*theta);     //convert to radians for sin
+					correctY = oldResult[1] + SQUARE_SIZE * Math.cos((Math.PI /180)*theta);	  //convert to radians for cos
 					passedLine++;
-					String printThis = passedLine +"";
-					LCD.drawString(printThis, 0, 4);
+
+					//Print to LCD
+					String printThis = "Lines passed: "+passedLine;
+					LCD.drawString(printThis, 0, 3);
 				}
-				
+
 				//Set new correct XYT and store info for next loop
 				odometer.setXYT(correctX, correctY, theta);
 				oldResult[0] = correctX;
@@ -90,8 +102,6 @@ public class OdometryCorrection implements Runnable {
 				oldResult[2] = theta;
 				oldSample = newColor;
 			}
-			
-			// TODO Update odometer with new calculated (and more accurate) vales
 
 			// this ensure the odometry correction occurs only once every period
 			correctionEnd = System.currentTimeMillis();

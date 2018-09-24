@@ -30,7 +30,7 @@ public class Display implements Runnable {
   /**
    * This is the overloaded class constructor
    * 
-   * @param odoData
+   * @param odoData (lcd and timeout)
    * @throws OdometerExceptions 
    */
   public Display(TextLCD lcd, long timeout) throws OdometerExceptions {
@@ -39,6 +39,11 @@ public class Display implements Runnable {
     this.lcd = lcd;
   }
 
+  /**
+   * Run method
+   * 
+   * @return void
+   */
   public void run() {
     
     lcd.clear();

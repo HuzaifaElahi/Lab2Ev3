@@ -75,7 +75,6 @@ public class OdometerData {
 
   /**
    * Return the Odomometer data.
-   * <p>
    * Writes the current position and orientation of the robot onto the odoData array. odoData[0] =
    * x, odoData[1] = y; odoData[2] = theta;
    * 
@@ -114,6 +113,7 @@ public class OdometerData {
    * @param dx
    * @param dy
    * @param dtheta
+   * @return void
    */
   public void update(double dx, double dy, double dtheta) {
     lock.lock();
@@ -159,6 +159,7 @@ public class OdometerData {
    * Overrides x. Use for odometry correction.
    * 
    * @param x the value of x
+   * @returm void
    */
   public void setX(double x) {
     lock.lock();
@@ -177,6 +178,7 @@ public class OdometerData {
    * Overrides y. Use for odometry correction.
    * 
    * @param y the value of y
+   * @return void
    */
   public void setY(double y) {
     lock.lock();
@@ -195,6 +197,7 @@ public class OdometerData {
    * Overrides theta. Use for odometry correction.
    * 
    * @param theta the value of theta
+   * @return void
    */
   public void setTheta(double theta) {
     lock.lock();
