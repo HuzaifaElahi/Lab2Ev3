@@ -111,6 +111,7 @@ public class OdometryCorrection implements Runnable {
 				oldSample = newColor;
 			}
 			
+			//Store color sample
 			oldSample = newColor;
 
 
