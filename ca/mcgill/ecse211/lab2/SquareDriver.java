@@ -40,7 +40,7 @@ public class SquareDriver {
 
     for (int i = 0; i < 4; i++) {
       // drive forward two tiles
-      leftMotor.setSpeed(FORWARD_SPEED-2);	//Weaker motor compensation
+      leftMotor.setSpeed(FORWARD_SPEED-1);	//Weaker motor compensation
       rightMotor.setSpeed(FORWARD_SPEED);
 
       leftMotor.rotate(convertDistance(leftRadius, 3 * TILE_SIZE), true);

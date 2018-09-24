@@ -28,7 +28,7 @@ public class OdometryCorrection implements Runnable {
 	double oldSample;
 	int passedLine;
 	double newColor;
-
+	int countx, county;
 
 
 	/**
@@ -44,10 +44,15 @@ public class OdometryCorrection implements Runnable {
 		//Color sensor data and variable initialization
 		color = new float[Lab2.myColorSample.sampleSize()];
 		this.csData = color;
+		oldResult[0] = -SQUARE_SIZE;
+		oldResult[1] = -SQUARE_SIZE;
 		correctX = 0;
 		correctY = 0;
 		oldSample = 0;
 		passedLine = 0;
+		countx = 0;
+		county = 0;
+		
 
 
 	}
@@ -90,23 +95,39 @@ public class OdometryCorrection implements Runnable {
 			if((newColor) < 0.3 && oldSample > 0.3) {
 
 				//Error handling 
-				if(result != null) {
+				//		if(result != null) {
 
-					//Beep to notify, update counter and find and set correct X and Y using old reference pts
+				//Beep to notify, update counter and find and set correct X and Y using old reference pts
+				if(passedLine < 12) {
 					passedLine++;
 					Sound.beep();
+
+					//If to deal with straight and back movement, else to deal with sideways x direction
 					if((passedLine < 4) || ((passedLine > 6)&&(passedLine < 10))) {
-						correctY = oldResult[1] + SQUARE_SIZE * Math.round(Math.cos((Math.PI /180)*theta));	  //convert to radians for cos
+						if(passedLine < 4) {
+							county++;
+						}
+						else {
+							county--;
+						}
+						correctY = county*SQUARE_SIZE * Math.round(Math.cos((Math.PI /180)*theta));	  //convert to radians for cos
 						odometer.setY(correctY);
 					}else {
-						correctX = oldResult[0] + SQUARE_SIZE * Math.round(Math.sin((Math.PI /180)*theta));     //convert to radians for sin
+						if(passedLine < 7) {
+							countx++;
+						}
+						else {
+							countx--;
+						}
+						correctX = countx*SQUARE_SIZE * Math.round(Math.sin((Math.PI /180)*theta));     //convert to radians for sin
 						odometer.setX(correctX);
 					}
-					
-					//Print to LCD
-					String printThis = "Lines passed: "+passedLine;
-					LCD.drawString(printThis, 0, 3);
+					// }
 				}
+
+				//Print to LCD
+				String printThis = "Lines passed: "+passedLine;
+				LCD.drawString(printThis, 0, 3);
 
 				//Set new correct XYT and store info for next loop
 				oldResult[0] = correctX;
@@ -114,7 +135,7 @@ public class OdometryCorrection implements Runnable {
 				oldResult[2] = theta;
 				oldSample = newColor;
 			}
-			
+
 			//Store color sample
 			oldSample = newColor;
 
