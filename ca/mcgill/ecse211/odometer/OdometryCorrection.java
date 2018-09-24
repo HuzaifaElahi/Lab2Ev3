@@ -7,6 +7,14 @@ import ca.mcgill.ecse211.lab2.Lab2;
 import lejos.hardware.Sound;
 import lejos.hardware.lcd.LCD;
 
+/**
+ * 
+ * @author Huzaifa, Jake
+ * This class is used to apply correction upon detection of a black line
+ * using theta, sin, cos functions, storing data from previous line detection
+ * and thw size of each square. Correction algorithm explained in run()
+ * 
+ */
 public class OdometryCorrection implements Runnable {
 	private static final long CORRECTION_PERIOD = 10;
 	private Odometer odometer;
@@ -78,8 +86,8 @@ public class OdometryCorrection implements Runnable {
 			double[] result = odometer.getXYT();
 			double theta = result[2];
 
-			//If line detected (intensity less than 0.3)
-			if((newColor) < 0.3) {
+			//If line detected (intensity less than 0.3), only count once by keeping track of last value
+			if((newColor) < 0.3 && oldSample > 0.3) {
 
 				//Error handling 
 				if(result != null) {
@@ -102,6 +110,9 @@ public class OdometryCorrection implements Runnable {
 				oldResult[2] = theta;
 				oldSample = newColor;
 			}
+			
+			oldSample = newColor;
+
 
 			// this ensure the odometry correction occurs only once every period
 			correctionEnd = System.currentTimeMillis();
