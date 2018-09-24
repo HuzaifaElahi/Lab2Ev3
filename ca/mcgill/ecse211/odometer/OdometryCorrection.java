@@ -92,11 +92,16 @@ public class OdometryCorrection implements Runnable {
 				//Error handling 
 				if(result != null) {
 
-					//Beep to notify, update counter and find correct X and Y using old reference pts
-					Sound.beep();
-					correctX = oldResult[0] + SQUARE_SIZE * Math.round(Math.sin((Math.PI /180)*theta));     //convert to radians for sin
-					correctY = oldResult[1] + SQUARE_SIZE * Math.round(Math.cos((Math.PI /180)*theta));	  //convert to radians for cos
+					//Beep to notify, update counter and find and set correct X and Y using old reference pts
 					passedLine++;
+					Sound.beep();
+					if((passedLine < 4) || ((passedLine > 6)&&(passedLine < 10))) {
+						correctY = oldResult[1] + SQUARE_SIZE * Math.round(Math.cos((Math.PI /180)*theta));	  //convert to radians for cos
+						odometer.setY(correctY);
+					}else {
+						correctX = oldResult[0] + SQUARE_SIZE * Math.round(Math.sin((Math.PI /180)*theta));     //convert to radians for sin
+						odometer.setX(correctX);
+					}
 					
 					//Print to LCD
 					String printThis = "Lines passed: "+passedLine;
@@ -104,7 +109,6 @@ public class OdometryCorrection implements Runnable {
 				}
 
 				//Set new correct XYT and store info for next loop
-				odometer.setXYT(correctX, correctY, theta);
 				oldResult[0] = correctX;
 				oldResult[1] = correctY;
 				oldResult[2] = theta;

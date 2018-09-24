@@ -20,7 +20,7 @@ public class Lab2 {
       new EV3LargeRegulatedMotor(LocalEV3.get().getPort("B"));
   private static final TextLCD lcd = LocalEV3.get().getTextLCD();
   public static final double WHEEL_RAD = 2.2;
-  public static final double TRACK = 13.6;
+  public static final double TRACK = 13.78;
   
   //Color Sensor and its variables are initialized
   private static final Port portColor = LocalEV3.get().getPort("S1");
