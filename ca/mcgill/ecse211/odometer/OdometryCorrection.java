@@ -50,10 +50,10 @@ public class OdometryCorrection implements Runnable {
 	 * using geometric distance calculations. Number of lines detected is kept track of on the LCD and
 	 * Old values are stored for reference for the next time a line is detected.
 	 * 
-	 * Sin and Cos are used instead of if statements for varying cases of theta as the errors in theta cancel
-	 * out over the average square travel to the initial point of origin, and the nature of Sin and Cos being
-	 * negative or positive at the appropriate values of theta along the journey ensures an easy to maintain 
-	 * and understand algorithm in 2 lines.
+	 * Sin and Cos are used instead of if statements for varying cases of theta as the errors in theta are 
+	 * dealt with by rounding to only change for the direction in which the robot is current moving in.
+	 * The nature of Sin and Cos being negative or positive at the appropriate values of theta along 
+	 * the journey ensures an easy to maintain and understand algorithm in 2 lines.
 	 * 
 	 * 
 	 * @throws OdometerExceptions
@@ -86,10 +86,10 @@ public class OdometryCorrection implements Runnable {
 
 					//Beep to notify, update counter and find correct X and Y using old reference pts
 					Sound.beep();
-					correctX = oldResult[0] + SQUARE_SIZE * Math.sin((Math.PI /180)*theta);     //convert to radians for sin
-					correctY = oldResult[1] + SQUARE_SIZE * Math.cos((Math.PI /180)*theta);	  //convert to radians for cos
+					correctX = oldResult[0] + SQUARE_SIZE * Math.round(Math.sin((Math.PI /180)*theta));     //convert to radians for sin
+					correctY = oldResult[1] + SQUARE_SIZE * Math.round(Math.cos((Math.PI /180)*theta));	  //convert to radians for cos
 					passedLine++;
-
+					
 					//Print to LCD
 					String printThis = "Lines passed: "+passedLine;
 					LCD.drawString(printThis, 0, 3);
