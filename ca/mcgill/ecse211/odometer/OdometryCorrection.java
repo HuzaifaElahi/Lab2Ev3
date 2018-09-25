@@ -130,12 +130,12 @@ public class OdometryCorrection implements Runnable {
 				}
 
 				//Print to LCD
-				String printThisTotal = "Lines passed (Total): "+ passedLine;
+				String printThisTotal = "Lines passed: "+ passedLine;
 				LCD.drawString(printThisTotal, 0, 3);
-				String printThisY = "Lines passed (Y axis): "+ county;
-				LCD.drawString(printThisY, 0, 3);
-				String printThisX = "Lines passed (X axis): "+ countx;
-				LCD.drawString(printThisX, 0, 3);
+				String printThisY = "Y passed: "+ county;
+				LCD.drawString(printThisY, 0, 4);
+				String printThisX = "X passed: "+ countx;
+				LCD.drawString(printThisX, 0, 5);
 
 
 				//Set new correct XYT and store info for next loop
