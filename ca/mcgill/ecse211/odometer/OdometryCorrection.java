@@ -104,31 +104,39 @@ public class OdometryCorrection implements Runnable {
 
 						//If to deal with straight and back movement, else to deal with sideways x direction
 						if((passedLine < 4) || ((passedLine > 6)&&(passedLine < 10))) {
-							
+							county++;
 							//Set Y to 0 at origin
 							if(passedLine == 1 || passedLine == 9 ) {
 								correctY = 0 * SQUARE_SIZE * Math.round(Math.cos((Math.PI /180)*theta));	  //convert to radians for cos
-							}else {
+							}
+							//Else build upon previously stored distance
+							else {
 								correctY = oldResult[1] + SQUARE_SIZE * Math.round(Math.cos((Math.PI /180)*theta));	  //convert to radians for cos
 							}
 							odometer.setY(correctY);
 						}else {
-							
+							countx++;
 							//Set X to 0 at origin
 							if(passedLine == 4 || passedLine == 12) {
-								correctX = 0 * SQUARE_SIZE * Math.round(Math.sin((Math.PI /180)*theta));	  //convert to radians for cos
+								correctX = 0 * SQUARE_SIZE * Math.round(Math.sin((Math.PI /180)*theta));	  //convert to radians for sin
 							}
+							//Else build upon previously stored distance
 							else {
 								correctX = oldResult[0] + SQUARE_SIZE * Math.round(Math.sin((Math.PI /180)*theta));     //convert to radians for sin
 							}
 							odometer.setX(correctX);
-						}
+						} 
 					}
 				}
 
 				//Print to LCD
-				String printThis = "Lines passed: "+passedLine;
-				LCD.drawString(printThis, 0, 3);
+				String printThisTotal = "Lines passed (Total): "+ passedLine;
+				LCD.drawString(printThisTotal, 0, 3);
+				String printThisY = "Lines passed (Y axis): "+ county;
+				LCD.drawString(printThisY, 0, 3);
+				String printThisX = "Lines passed (X axis): "+ countx;
+				LCD.drawString(printThisX, 0, 3);
+
 
 				//Set new correct XYT and store info for next loop
 				oldResult[0] = correctX;
