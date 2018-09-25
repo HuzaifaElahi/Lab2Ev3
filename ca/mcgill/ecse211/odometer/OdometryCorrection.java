@@ -28,7 +28,8 @@ public class OdometryCorrection implements Runnable {
 	double oldSample;
 	int passedLine;
 	double newColor;
-
+	int countx;
+	int county;
 
 
 	/**
@@ -44,12 +45,14 @@ public class OdometryCorrection implements Runnable {
 		//Color sensor data and variable initialization
 		color = new float[Lab2.myColorSample.sampleSize()];
 		this.csData = color;
-		oldResult[0] = -SQUARE_SIZE;
-		oldResult[1] = -SQUARE_SIZE;
+		oldResult[0] = 0;
+		oldResult[1] = 0;
 		correctX = 0;
 		correctY = 0;
 		oldSample = 0;
 		passedLine = 0;
+		countx=0;
+		county=0;
 
 
 	}
@@ -101,10 +104,23 @@ public class OdometryCorrection implements Runnable {
 
 						//If to deal with straight and back movement, else to deal with sideways x direction
 						if((passedLine < 4) || ((passedLine > 6)&&(passedLine < 10))) {
-							correctY = oldResult[1] + SQUARE_SIZE * Math.round(Math.cos((Math.PI /180)*theta));	  //convert to radians for cos
+							
+							//Set Y to 0 at origin
+							if(passedLine == 1 || passedLine == 9 ) {
+								correctY = 0 * SQUARE_SIZE * Math.round(Math.cos((Math.PI /180)*theta));	  //convert to radians for cos
+							}else {
+								correctY = oldResult[1] + SQUARE_SIZE * Math.round(Math.cos((Math.PI /180)*theta));	  //convert to radians for cos
+							}
 							odometer.setY(correctY);
 						}else {
-							correctX = oldResult[0] + SQUARE_SIZE * Math.round(Math.sin((Math.PI /180)*theta));     //convert to radians for sin
+							
+							//Set X to 0 at origin
+							if(passedLine == 4 || passedLine == 12) {
+								correctX = 0 * SQUARE_SIZE * Math.round(Math.sin((Math.PI /180)*theta));	  //convert to radians for cos
+							}
+							else {
+								correctX = oldResult[0] + SQUARE_SIZE * Math.round(Math.sin((Math.PI /180)*theta));     //convert to radians for sin
+							}
 							odometer.setX(correctX);
 						}
 					}
